@@ -10,10 +10,6 @@ emma = nltk.corpus.gutenberg.words('austen-emma.txt')
 # join the list of words together into a string
 emmaText = text = " ".join(emma)
 
-# get a sample of the first 10000 words
-sampleSize = 10000
-emmaSampleText = text = " ".join(emma[:sampleSize])
-
 
 # Translate a string to an integer using ASCII
 def translate_to_number(s):
@@ -62,15 +58,24 @@ def test(s):
     print(f"{number} -> {s_back}\n")
 
 
-
+# estimate the time it will take to run 'test', given a smaller sample of text
 def estimateTime(sample, full):
     time = timeit.timeit(lambda: test(sample), number=1)
-    print(f"Running time of sample: {time} seconds")
+    print(f"\nRunning time of sample: {time} seconds")
 
     sampleLen = len(sample)
     fullLen = len(full)
     timesLarger = fullLen/sampleLen
+    print(f"\nThe length of the sample is: {sample},"
+          f" the length of the full text is: {full},"
+          f" and the ratio is: {timesLarger}")
     print(f"Estimated running time of full: {time * timesLarger}")
 
 
+def getSample(original, sampleSize):
+
+    return original[:sampleSize]
+
+
 # estimateTime(emmaSampleText, emmaText)
+estimateTime(getSample(emmaText, 100), emmaText)
