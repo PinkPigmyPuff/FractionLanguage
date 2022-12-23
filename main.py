@@ -47,14 +47,5 @@ def test(s):
 
 # Test the translation functions with a few examples
 test("Hello World!")
-# Output:
-# "Hello World!" -> 202104101109011111101110810033
-# 202104101109011111101110810033 -> "Hello World!"
 test("123-456-7890")
-# Output:
-# "123-456-7890" -> 4950511050106107108109485748654873
-# 4950511050106107108109485748654873 -> "123-456-7890"
 test("Goodbye!")
-# Output:
-# "Goodbye!" -> 709011011101111110410510733
-# 709011011101111110410510733 -> "Goodbye!"
