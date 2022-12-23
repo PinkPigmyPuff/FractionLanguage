@@ -1,6 +1,15 @@
 import nltk
+import timeit
+import sys
+
+sys.set_int_max_str_digits(1000000)
+
 emma = nltk.corpus.gutenberg.words('austen-emma.txt')
-print(len(emma))
+
+sample = emma[:10000]
+
+emmaSampleText = text = " ".join(sample)
+emmaText = text = " ".join(emma)
 
 # Translate a string to an integer using ASCII
 def translate_to_number(s):
@@ -41,7 +50,7 @@ def test(s):
     # Translate the input string to an integer using ASCII
     number = translate_to_number(s)
     # Print the intermediate result
-    print(f"{s} -> {number}")
+    print(f"{s} -> {str(number)}")
 
     # Translate the integer back to a string using ASCII
     s_back = translate_to_letters(number)
@@ -49,7 +58,15 @@ def test(s):
     print(f"{number} -> {s_back}\n")
 
 
-# Test the translation functions with a few examples
-test("Hello World!")
-test("123-456-7890")
-test("Goodbye!")
+
+def estimateTime(sample, full):
+    time = timeit.timeit(lambda: test(sample), number=1)
+    print(f"Running time of sample: {time} seconds")
+
+    sampleLen = len(sample)
+    fullLen = len(full)
+    timesLarger = fullLen/sampleLen
+    print(f"Estimated running time of full: {time * timesLarger}")
+
+
+# estimateTime(emmaSampleText, emmaText)
