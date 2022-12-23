@@ -1,3 +1,7 @@
+import nltk
+emma = nltk.corpus.gutenberg.words('austen-emma.txt')
+print(len(emma))
+
 # Translate a string to an integer using ASCII
 def translate_to_number(s):
     # Initialize a variable to store the translated number
@@ -42,7 +46,7 @@ def test(s):
     # Translate the integer back to a string using ASCII
     s_back = translate_to_letters(number)
     # Print the final result
-    print(f"{number} -> {s_back}")
+    print(f"{number} -> {s_back}\n")
 
 
 # Test the translation functions with a few examples
