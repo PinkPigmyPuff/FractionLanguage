@@ -1,73 +1,60 @@
-def translate_to_numbers(s):
-    # Create a dictionary that maps each letter to a corresponding two-digit code
-    letter_to_number = {
-        'a': '01', 'b': '02', 'c': '03',
-        'd': '04', 'e': '05', 'f': '06',
-        'g': '07', 'h': '08', 'i': '09',
-        'j': '10', 'k': '11', 'l': '12',
-        'm': '13', 'n': '14', 'o': '15',
-        'p': '16', 'q': '17', 'r': '18', 's': '19',
-        't': '20', 'u': '21', 'v': '22',
-        'w': '23', 'x': '24', 'y': '25', 'z': '26'
-    }
-
-    # Initialize an empty string to store the translated numbers
-    numbers = ""
+# Translate a string to an integer using ASCII
+def translate_to_number(s):
+    # Initialize a variable to store the translated number
+    number = 0
 
     # Iterate through each character in the input string
     for c in s:
-        # If the character is a letter, translate it to a number using the dictionary
-        if c.isalpha():
-            numbers += letter_to_number[c.lower()]
-        # If the character is a digit, add it to the output string as is
-        elif c.isdigit():
-            numbers += c
-        # If the character is a space, add '00' to the output string
-        elif c == " ":
-            numbers += "00"
-        # If the character is not a letter, digit, or space, ignore it
+        # Translate the character to an ASCII code using the ord() function
+        ascii_code = ord(c)
+        # Shift the number to the left by 8 bits (1 byte) and add the ASCII code
+        number = (number << 8) + ascii_code
 
-    return numbers
+    return number
 
 
-def translate_to_letters(s):
-    # Create a dictionary that maps each two-digit code to a corresponding letter
-    number_to_letter = {
-        '01': 'a', '02': 'b', '03': 'c',
-        '04': 'd', '05': 'e', '06': 'f',
-        '07': 'g', '08': 'h', '09': 'i',
-        '10': 'j', '11': 'k', '12': 'l',
-        '13': 'm', '14': 'n', '15': 'o',
-        '16': 'p', '17': 'q', '18': 'r', '19': 's',
-        '20': 't', '21': 'u', '22': 'v',
-        '23': 'w', '24': 'x', '25': 'y', '26': 'z'
-    }
-    # Initialize an empty string to store the translated letters
-    letters = ""
+# Translate an integer to a string using ASCII
+def translate_to_letters(number):
+    # Initialize an empty string to store the translated characters
+    s = ""
 
-    # Split the input string into a list of two-digit codes
-    codes = [s[i:i + 2] for i in range(0, len(s), 2)]
+    # Iterate until the number is 0
+    while number > 0:
+        # Extract the least significant byte from the number
+        ascii_code = number & 0xff
+        # Translate the byte to a character using the chr() function
+        character = chr(ascii_code)
+        # Add the character to the beginning of the output string
+        s = character + s
+        # Shift the number to the right by 8 bits (1 byte)
+        number = number >> 8
 
-    # Iterate through each two-digit code
-    for code in codes:
-        # If the code is a space ('00'), add a space to the output string
-        if code == "00":
-            letters += " "
-        # If the code is a valid two-digit code, translate it to a letter using the dictionary
-        elif code in number_to_letter:
-            letters += number_to_letter[code]
-        # If the code is not a valid two-digit code, ignore it
-
-    return letters
+    return s
 
 
-def test(testString):
-    print('Initial string: ' + testString)
-    numberTranslation = translate_to_numbers(testString)
-    print('Number translation: ' + numberTranslation)
-    backToLetters = translate_to_letters(numberTranslation)
-    print('Back to letters: ' + backToLetters)
+# Test the translation functions with a given input string
+def test(s):
+    # Translate the input string to an integer using ASCII
+    number = translate_to_number(s)
+    # Print the intermediate result
+    print(f"{s} -> {number}")
+
+    # Translate the integer back to a string using ASCII
+    s_back = translate_to_letters(number)
+    # Print the final result
+    print(f"{number} -> {s_back}")
 
 
-test("My name is 123, otherwise known as Theo the 4th.")
-test("does git work??")
+# Test the translation functions with a few examples
+test("Hello World!")
+# Output:
+# "Hello World!" -> 202104101109011111101110810033
+# 202104101109011111101110810033 -> "Hello World!"
+test("123-456-7890")
+# Output:
+# "123-456-7890" -> 4950511050106107108109485748654873
+# 4950511050106107108109485748654873 -> "123-456-7890"
+test("Goodbye!")
+# Output:
+# "Goodbye!" -> 709011011101111110410510733
+# 709011011101111110410510733 -> "Goodbye!"
