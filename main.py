@@ -2,14 +2,18 @@ import nltk
 import timeit
 import sys
 
+# set the maximum amount of digits that can be converted to a string to be WAY higher
 sys.set_int_max_str_digits(1000000)
 
+# import the book 'emma' from nltk
 emma = nltk.corpus.gutenberg.words('austen-emma.txt')
-
-sample = emma[:10000]
-
-emmaSampleText = text = " ".join(sample)
+# join the list of words together into a string
 emmaText = text = " ".join(emma)
+
+# get a sample of the first 10000 words
+sampleSize = 10000
+emmaSampleText = text = " ".join(emma[:sampleSize])
+
 
 # Translate a string to an integer using ASCII
 def translate_to_number(s):
