@@ -1,9 +1,11 @@
 import nltk
 import timeit
 import sys
+from tqdm import tqdm
+import fractions
 
 # set the maximum amount of digits that can be converted to a string to be WAY higher
-sys.set_int_max_str_digits(1000000)
+sys.set_int_max_str_digits(10000000)
 
 # import the book 'emma' from nltk
 emma = nltk.corpus.gutenberg.words('austen-emma.txt')
@@ -17,7 +19,7 @@ def translate_to_number(s):
     number = 0
 
     # Iterate through each character in the input string
-    for c in s:
+    for c in tqdm(s):
         # Translate the character to an ASCII code using the ord() function
         ascii_code = ord(c)
         # Shift the number to the left by 8 bits (1 byte) and add the ASCII code
@@ -47,15 +49,16 @@ def translate_to_letters(number):
 
 # Test the translation functions with a given input string
 def test(s):
+
     # Translate the input string to an integer using ASCII
     number = translate_to_number(s)
     # Print the intermediate result
-    print(f"{s} -> {str(number)}")
+    # print(f"{s} -> {str(number)}")
 
     # Translate the integer back to a string using ASCII
     s_back = translate_to_letters(number)
     # Print the final result
-    print(f"{number} -> {s_back}\n")
+    # print(f"{number} -> {s_back}\n")
 
 
 # estimate the time it will take to run 'test', given a smaller sample of text
@@ -66,16 +69,35 @@ def estimateTime(sample, full):
     sampleLen = len(sample)
     fullLen = len(full)
     timesLarger = fullLen/sampleLen
-    print(f"\nThe length of the sample is: {sample},"
-          f" the length of the full text is: {full},"
+    print(f"\nThe length of the sample is: {sampleLen},"
+          f" the length of the full text is: {fullLen},"
           f" and the ratio is: {timesLarger}")
     print(f"Estimated running time of full: {time * timesLarger}")
 
 
 def getSample(original, sampleSize):
-
     return original[:sampleSize]
 
+def decimal_to_fraction(decimal):
+    # Convert the decimal to a fraction using the fractions module
+    fraction = fractions.Fraction(decimal).limit_denominator()
+    return fraction
 
-# estimateTime(emmaSampleText, emmaText)
-estimateTime(getSample(emmaText, 100), emmaText)
+
+# test(getSample(emmaText, 100000))
+emmaNum = translate_to_number(getSample(emmaText, 100))
+print(emmaNum)
+fraction = fractions.Fraction(emmaNum)
+print(fraction)
+power_of_10 = len(str(emmaNum))
+print(power_of_10)
+decimal = fraction / (10 ** power_of_10)
+print(decimal)
+simplified = decimal.limit_denominator()
+print(simplified)
+
+# Open the file in write mode
+with open('emma.txt', 'w') as f:
+    # Write the emmaNum variable to the file
+    f.write(str(emmaNum))
+
