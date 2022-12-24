@@ -3,6 +3,7 @@ import timeit
 import sys
 from tqdm import tqdm
 import fractions
+import decimal
 
 # set the maximum amount of digits that can be converted to a string to be WAY higher
 sys.set_int_max_str_digits(10000000)
@@ -11,6 +12,10 @@ sys.set_int_max_str_digits(10000000)
 emma = nltk.corpus.gutenberg.words('austen-emma.txt')
 # join the list of words together into a string
 emmaText = text = " ".join(emma)
+
+all_words = nltk.corpus.words.words()
+ten_letter_words = [word for word in all_words if len(word) == 10]
+print(ten_letter_words)
 
 
 # Translate a string to an integer using ASCII
@@ -84,17 +89,22 @@ def decimal_to_fraction(decimal):
     return fraction
 
 
-# test(getSample(emmaText, 100000))
-emmaNum = translate_to_number(getSample(emmaText, 100))
-print(emmaNum)
-fraction = fractions.Fraction(emmaNum)
-print(fraction)
+def decimal_from_fraction(frac):
+    return frac.numerator / decimal.Decimal(frac.denominator)
+
+
+emmaNum = translate_to_number(getSample(emmaText, 500))
+print(f"emmaNumber: {emmaNum}")
 power_of_10 = len(str(emmaNum))
-print(power_of_10)
-decimal = fraction / (10 ** power_of_10)
-print(decimal)
-simplified = decimal.limit_denominator()
-print(simplified)
+print(f"power of 10: {power_of_10}")
+decimal.getcontext().prec = 100
+decimalEmma = decimal.Decimal(emmaNum) / (decimal.Decimal(10) ** power_of_10)
+print(f"decimal Emma: {decimalEmma}")
+fraction = fractions.Fraction(str(decimalEmma)).limit_denominator()
+print(f"fraction: {fraction}")
+
+backToFraction = decimal_from_fraction(fraction)
+print(f"back to fraction: {backToFraction}")
 
 # Open the file in write mode
 with open('emma.txt', 'w') as f:
