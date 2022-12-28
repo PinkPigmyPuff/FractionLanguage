@@ -4,6 +4,7 @@ import sys
 from tqdm import tqdm
 import fractions
 import decimal
+import math
 
 # set the maximum amount of digits that can be converted to a string to be WAY higher
 sys.set_int_max_str_digits(10000000)
@@ -93,21 +94,24 @@ def decimal_from_fraction(frac):
     return frac.numerator / decimal.Decimal(frac.denominator)
 
 
-emmaNum = translate_to_number(getSample(emmaText, 500))
-print(f"emmaNumber: {emmaNum}")
-power_of_10 = len(str(emmaNum))
-print(f"power of 10: {power_of_10}")
-decimal.getcontext().prec = 100
-decimalEmma = decimal.Decimal(emmaNum) / (decimal.Decimal(10) ** power_of_10)
-print(f"decimal Emma: {decimalEmma}")
-fraction = fractions.Fraction(str(decimalEmma)).limit_denominator()
-print(f"fraction: {fraction}")
+def convert(num):
+    print(f"original Number: {num}")
+    power_of_10 = len(str(num))
+    print(f"power of 10: {power_of_10}")
+    decimal.getcontext().prec = 100
+    decimalNum = decimal.Decimal(num) / (decimal.Decimal(10) ** power_of_10)
+    print(f"decimal version: {decimalNum}")
+    fraction = fractions.Fraction(str(decimalNum)).limit_denominator()
+    print(f"fraction: {fraction}")
+    backToFraction = decimal_from_fraction(fraction)
+    print(f"back to fraction: {backToFraction}")
 
-backToFraction = decimal_from_fraction(fraction)
-print(f"back to fraction: {backToFraction}")
 
 # Open the file in write mode
 with open('emma.txt', 'w') as f:
     # Write the emmaNum variable to the file
     f.write(str(emmaNum))
 
+
+emmaNum = translate_to_number(getSample(emmaText, 500))
+convert(emmaNum)
