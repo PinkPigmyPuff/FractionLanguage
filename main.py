@@ -84,34 +84,25 @@ def estimateTime(sample, full):
 def getSample(original, sampleSize):
     return original[:sampleSize]
 
-def decimal_to_fraction(decimal):
-    # Convert the decimal to a fraction using the fractions module
-    fraction = fractions.Fraction(decimal).limit_denominator()
-    return fraction
+
+def convert(d):
+    print(f"original number: {d}")
+    decimal.getcontext().prec = 1000000
+    d = d / 10 ** (d.adjusted() + 1)
+    f = fractions.Fraction(*d.as_integer_ratio())
+    print(f"fraction: {f}")
+    d2 = decimal.Decimal(f.numerator) / f.denominator
+    assert (d2 == d)
+    print(f"d2: {d2}")
 
 
-def decimal_from_fraction(frac):
-    return frac.numerator / decimal.Decimal(frac.denominator)
+def file():
+    # Open the file in write mode
+    with open('emma.txt', 'w') as f:
+        # Write the emmaNum variable to the file
+        f.write(str(emmaNum))
 
 
-def convert(num):
-    print(f"original Number: {num}")
-    power_of_10 = len(str(num))
-    print(f"power of 10: {power_of_10}")
-    decimal.getcontext().prec = 100
-    decimalNum = decimal.Decimal(num) / (decimal.Decimal(10) ** power_of_10)
-    print(f"decimal version: {decimalNum}")
-    fraction = fractions.Fraction(str(decimalNum)).limit_denominator()
-    print(f"fraction: {fraction}")
-    backToFraction = decimal_from_fraction(fraction)
-    print(f"back to fraction: {backToFraction}")
+emmaNum = translate_to_number(getSample(emmaText, 5000))
+convert(decimal.Decimal(emmaNum))
 
-
-# Open the file in write mode
-with open('emma.txt', 'w') as f:
-    # Write the emmaNum variable to the file
-    f.write(str(emmaNum))
-
-
-emmaNum = translate_to_number(getSample(emmaText, 500))
-convert(emmaNum)
